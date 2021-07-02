@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity }
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import Book from '../Book';
-// API key : AIzaSyDOKiKypQtB-temR-m3jjToLjGdyPSNe5w
 
 export default function LibraryScreen() {
 
@@ -42,7 +41,7 @@ if(Object.entries(booksArray).length > 0) {
         </View>
 
         <FlatList 
-        extraData={newBooksArray}
+        data={newBooksArray}
         
         renderItem={({item}) => {
           // <TouchableOpacity onPress={seeMoreDetails}>
