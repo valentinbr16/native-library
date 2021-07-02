@@ -17,7 +17,7 @@ export default function LibraryScreen() {
         })
     }, [])
 
-    const [newBooksArray, setNewBooksArray] = useState(booksArray)
+    const [newBooksArray, setNewBooksArray] = useState([]);
     
     const filterBook = () => {
       setNewBooksArray(booksArray.filter(book => book.volumeInfo.title.toLowerCase().includes(searchInputValue.toLowerCase())));
