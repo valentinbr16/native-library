@@ -1,69 +1,61 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
-import Book from '../Book';
+// import Book from '../Book';
 
-export default function LibraryScreen() {
+export default function LibraryScreen({navigation}) {
 
     const [searchInputValue, setSearchInputValue] = useState("");
     const [booksArray, setBooksArray] = useState([]);
 
-    useEffect(() => {
-        axios.get('https://www.googleapis.com/books/v1/volumes?q=kamasutra&key=AIzaSyDOKiKypQtB-temR-m3jjToLjGdyPSNe5w')
-        .then(res => {
-        setBooksArray(res.data.items)    
-        console.log(res.data.items)
-        })
-    }, [])
-
-    const [newBooksArray, setNewBooksArray] = useState([]);
-    
     const filterBook = () => {
-      setNewBooksArray(booksArray.filter(book => book.volumeInfo.title.toLowerCase().includes(searchInputValue.toLowerCase())));
-      return newBooksArray;
-      }
+        axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInputValue}&key=AIzaSyDOKiKypQtB-temR-m3jjToLjGdyPSNe5w`)
+        .then(res => {
+        setBooksArray(res.data.items) 
 
-    // @Todo
-    // const seeMoreDetails = () => {
+        console.log(res.data.items);   
+        })
+    }
 
-    // }
 
-if(Object.entries(booksArray).length > 0) {
     return (
-      <View style={styles.container}>
-        
-        <Text style={styles.headerTitle}>Ma Bibliothèque</Text>
+      <ScrollView>
+        <View style={styles.container}>
+          
+          <Text style={styles.headerTitle}>Ma Bibliothèque</Text>
 
-        <View style={styles.searchBar}>
-            <TextInput style={styles.searchInput} onChangeText={e => {setSearchInputValue(e)}} value={searchInputValue} />
-            <Button onPress={filterBook} title="OK" color="green" />
+          <View style={styles.searchBar}>
+              <TextInput style={styles.searchInput} onChangeText={e => {setSearchInputValue(e)}} value={searchInputValue} />
+              <Button onPress={filterBook} title="OK" color="green" />
+          </View>
+              {
+          booksArray.map((item) => (
+            
+                <ListItem.Swipeable
+                bottomDivider
+                  leftContent={
+                    <Button
+                      onPress={() => navigation.navigate('Book', item)}
+                      title="Détails"
+                      icon={{ name: 'delete', color: 'green' }}
+                      buttonStyle={{ minHeight: '200%' }}
+                    />
+                  }
+                >
+                <AntDesign style={styles.bookIcon} name="book" size={32} color="black" />
+                <ListItem.Content>
+                  <ListItem.Title>{item.volumeInfo.title}</ListItem.Title>
+                  <ListItem.Subtitle>{item.volumeInfo.subtitle}</ListItem.Subtitle>
+                </ListItem.Content>
+                </ListItem.Swipeable>
+              ))
+          }
         </View>
-
-        <FlatList 
-        data={newBooksArray}
-        
-        renderItem={({item}) => {
-          // <TouchableOpacity onPress={seeMoreDetails}>
-            <View style={styles.oneBook}>
-              <AntDesign style={styles.bookIcon} name="book" size={32} color="black" />
-              <Book title={item.volumeInfo.title} description={item.volumeInfo.subtitle} />
-            </View>
-          // </TouchableOpacity>
-        }}
-
-        keyExtractor = {item => item.id.toString()} 
-
-        showsVerticalScrollIndicator={false}
-        />
-        </View>
+      </ScrollView>
     );
 }
-else {
-    return <Text>Loading...</Text>
-  }
-}
-
 
 const styles = StyleSheet.create({
 container: {
@@ -90,7 +82,4 @@ oneBook : {
   width: '80%',
   padding: 10,
 },
-bookIcon : {
-  margin: 10,
-}
-});
+})
