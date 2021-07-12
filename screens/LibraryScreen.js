@@ -34,13 +34,12 @@ export default function LibraryScreen({navigation}) {
           booksArray.map((item) => (
             
                 <ListItem.Swipeable
-                bottomDivider
+                  bottomDivider
+
                   leftContent={
                     <Button
                       onPress={() => navigation.navigate('Book', item)}
-                      title="Détails"
-                      icon={{ name: 'delete', color: 'green' }}
-                      buttonStyle={{ minHeight: '200%' }}
+                      title="Détails"     
                     />
                   }
                 >

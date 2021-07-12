@@ -9,14 +9,14 @@ export default function SplashScreen({navigation}) {
     })
 
     const goToLibrary = () => {
-        navigation.navigate('Library');
+        // navigation.navigate('Library');
 
-        // navigation.reset({
-        //     index:0,
-        //     routes: [{
-        //         name:'Library'
-        //     }]
-        // });
+        navigation.reset({
+            index:0,
+            routes: [{
+                name:'Library'
+            }]
+        });
     }
 
     if(!fontsLoaded) {
